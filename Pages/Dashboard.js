@@ -31,7 +31,7 @@ export default function Dashboard({ navigation }) {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log("data", data);
+            //console.log("data", data);
             setRecipedata(data.results);
             setTotalresult(data.totalResults)
         } catch (err) {
@@ -47,8 +47,7 @@ export default function Dashboard({ navigation }) {
                 style={styles.linearGradient}>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <MaterialCommunityIcons name="menu" onPress={() => navigation.navigate('RegularAccount')} size={30} color="white" style={{ marginTop: width * 0.14, marginLeft: 10 }} />
-                        <MaterialCommunityIcons name="shopping-outline" onPress={() => navigation.navigate('Cart')} size={30} color="white" style={{ marginTop: width * 0.14, marginRight: 10 }} />
+                        <MaterialCommunityIcons name="menu" size={30} color="white" style={{ marginTop: width * 0.14, marginLeft: 10 }} />
                     </View>
                     <Text style={styles.title}>WELCOME</Text>
                     <TextInput
@@ -65,7 +64,7 @@ export default function Dashboard({ navigation }) {
                         <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Lists</Text>
                         {recipedata?.map(function (food) {
                             return (
-                                <View key={food.id}>
+                                <TouchableOpacity onPress={()=>navigation.navigate('RecipeDetails', food.id)} key={food.id}>
                                     <ImageBackground
                                         source={{ uri: food.image }}
                                         style={{ width: width * 0.9, height: height * 0.3, marginTop: 20, marginLeft: 15, marginBottom: 20 }}
@@ -75,7 +74,7 @@ export default function Dashboard({ navigation }) {
 
                                         </View>
                                     </ImageBackground>
-                                </View>
+                                </TouchableOpacity>
                             )
                         })}</> : ''}
                 </ScrollView >

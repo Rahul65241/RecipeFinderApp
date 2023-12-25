@@ -37,9 +37,7 @@ export default function Login({ navigation }) {
                     style={styles.loginBtn}>
                     <Text style={styles.loginText}>LOGIN INTO ACCOUNT</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                    <Text style={styles.signup}>Signup</Text>
-                </TouchableOpacity>
+                <Text style={{marginTop:30, color:'white', width:'80%'}}>****This Page is only for View. No API IS INVOLVED FOR LOGIN*****</Text>
             </LinearGradient>
         </>
     );
