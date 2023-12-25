@@ -16,13 +16,6 @@ export default function Dashboard({ navigation }) {
     const [totalresult, setTotalresult] = useState();
 
 
-    console.log('search', search);
-
-    // useEffect(() => {
-    //     Recipelist();
-    // }, [])
-
-
     const Recipelist = async () => {
         try {
             const { data } = await axios({
@@ -67,8 +60,8 @@ export default function Dashboard({ navigation }) {
                     <TouchableOpacity onPress={() => { setStatus(1), Recipelist() }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 15, backgroundColor: 'blue', width: '20%', alignSelf: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>SEARCH</Text>
                     </TouchableOpacity>
-                    {totalresult==0?<Text style={{alignSelf:'center', marginTop:width*0.5, fontWeight:"bold", fontSize:22}}>No Result Found</Text>:''}
-                    {totalresult != 0 && status==1 ? <>
+                    {totalresult == 0 ? <Text style={{ alignSelf: 'center', marginTop: width * 0.5, fontWeight: "bold", fontSize: 22 }}>No Result Found</Text> : ''}
+                    {totalresult != 0 && status == 1 ? <>
                         <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Lists</Text>
                         {recipedata?.map(function (food) {
                             return (
