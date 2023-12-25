@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, ImageBackground, Dimensions, TextInput, TouchableOpacity, FlatList, Pressable } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Button, Image, ImageBackground, Dimensions, TextInput, TouchableOpacity, FlatList, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 const width = Dimensions.get('window').width;
@@ -10,13 +10,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Dashboard({ navigation }) {
-    const [name, setName] = useState('');
-    const [username, setUsername] = useState('');
     const [recipedata, setRecipedata] = useState();
+    const [search, setSearch] = useState();
+    const [status, setStatus] = useState();
+    const [totalresult, setTotalresult] = useState();
 
-    useEffect(() => {
-        Recipelist();
-    }, [])
+
+    console.log('search', search);
+
+    // useEffect(() => {
+    //     Recipelist();
+    // }, [])
 
 
     const Recipelist = async () => {
@@ -25,7 +29,9 @@ export default function Dashboard({ navigation }) {
                 method: 'GET',
                 url: 'https://api.spoonacular.com/recipes/complexSearch',
                 params: {
-                    apiKey: 'e04b1144c5d24609aaba868e7e09f113'
+                    apiKey: 'e04b1144c5d24609aaba868e7e09f113',
+                    query: search,
+                    number: 100
                 },
                 headers: {
                     'Accept': 'application/json',
@@ -33,7 +39,8 @@ export default function Dashboard({ navigation }) {
                 },
             });
             console.log("data", data);
-            setRecipedata(data.results)
+            setRecipedata(data.results);
+            setTotalresult(data.totalResults)
         } catch (err) {
             console.log("195", err);
         }
@@ -50,31 +57,34 @@ export default function Dashboard({ navigation }) {
                         <MaterialCommunityIcons name="menu" onPress={() => navigation.navigate('RegularAccount')} size={30} color="white" style={{ marginTop: width * 0.14, marginLeft: 10 }} />
                         <MaterialCommunityIcons name="shopping-outline" onPress={() => navigation.navigate('Cart')} size={30} color="white" style={{ marginTop: width * 0.14, marginRight: 10 }} />
                     </View>
-                    <Text style={styles.title}>WELCOME {username}!</Text>
-                    <View style={styles.inputView}>
-                        <TextInput
-                            style={styles.inputText}
-                            placeholder="Search"
-                            autoComplete='off'
-                            onChangeText={text => setName(text)} />
-                    </View>
-                    <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Lists</Text>
-                    {recipedata == undefined || recipedata == null || recipedata == '' ? '' :
-                        (recipedata?.map(function (food) {
+                    <Text style={styles.title}>WELCOME</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Search"
+                        //autoComplete='off'
+                        value={search}
+                        onChangeText={text => setSearch(text)} />
+                    <TouchableOpacity onPress={() => { setStatus(1), Recipelist() }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 15, backgroundColor: 'blue', width: '20%', alignSelf: 'center' }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>SEARCH</Text>
+                    </TouchableOpacity>
+                    {totalresult==0?<Text style={{alignSelf:'center', marginTop:width*0.5, fontWeight:"bold", fontSize:22}}>No Result Found</Text>:''}
+                    {totalresult != 0 && status==1 ? <>
+                        <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Lists</Text>
+                        {recipedata?.map(function (food) {
                             return (
                                 <View key={food.id}>
                                     <ImageBackground
-                                        source={{uri:food.image}}
+                                        source={{ uri: food.image }}
                                         style={{ width: width * 0.9, height: height * 0.3, marginTop: 20, marginLeft: 15, marginBottom: 20 }}
                                     >
-                                        <View style={{ position: 'absolute', bottom: 0, backgroundColor: 'blue',flex:1,  width: width * 0.9, alignItems: 'center' }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20, marginBottom:10, marginTop:5 }}>{food.title}</Text>
+                                        <View style={{ position: 'absolute', bottom: 0, backgroundColor: 'blue', flex: 1, width: width * 0.9, alignItems: 'center' }}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20, marginBottom: 10, marginTop: 5 }}>{food.title}</Text>
 
                                         </View>
                                     </ImageBackground>
                                 </View>
                             )
-                        }))}
+                        })}</> : ''}
                 </ScrollView >
             </LinearGradient >
         </>
@@ -103,7 +113,15 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     inputText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "90%",
+        backgroundColor: "#F6F6F6",
         height: 50,
+        borderRadius: 8,
+        marginTop: 25,
+        alignSelf: 'center',
+        padding: 15,
         color: "black",
     },
     title: {
