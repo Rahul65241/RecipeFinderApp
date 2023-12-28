@@ -69,6 +69,10 @@ export default function RecipeDetails({ navigation, route }) {
                                 </View>
                             </View>
                         </View>
+                        <TouchableOpacity style={{width:'30%', height:35, backgroundColor:'blue', alignSelf:"center", alignItems:'center',
+                        marginTop:15, borderRadius:6}} onPress={()=>alert('Added to Favourite List')}>
+                            <Text style={{marginTop:5, fontWeight:'bold', color:'white', fontSize:14}}>Add to Favourite</Text>
+                        </TouchableOpacity>
 
                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 15, marginTop: 20,  }}>
                         Recipe Image

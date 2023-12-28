@@ -59,6 +59,10 @@ export default function Dashboard({ navigation }) {
                     <TouchableOpacity onPress={() => { setStatus(1), Recipelist() }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 15, backgroundColor: 'blue', width: '20%', alignSelf: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>SEARCH</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => alert('Added as Favourite')} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '60%', alignSelf: 'center' }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>CLICK TO VIEW FAVOURITE LIST</Text>
+                    </TouchableOpacity>
+
                     {totalresult == 0 ? <Text style={{ alignSelf: 'center', marginTop: width * 0.5, fontWeight: "bold", fontSize: 22 }}>No Result Found</Text> : ''}
                     {totalresult != 0 && status == 1 ? <>
                         <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Lists</Text>
