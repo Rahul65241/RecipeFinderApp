@@ -29,7 +29,7 @@ export default function Dashboard({ navigation }) {
 
     useEffect(() => {
         getData();
-    }, [])
+    }, [favouriteid])
 
 
     //console.log('favouriteid:', favouriteid);
