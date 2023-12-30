@@ -44,12 +44,6 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     title: {
         fontWeight: "bold",
         fontSize: 50,
@@ -74,15 +68,6 @@ const styles = StyleSheet.create({
     inputText: {
         height: 50,
         color: "white",
-    },
-    forgot: {
-        color: "white",
-        fontSize: 11
-    },
-    signup: {
-        color: "white",
-        fontSize: 13,
-        marginTop: 5
     },
     loginBtn: {
         width: "80%",

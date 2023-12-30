@@ -82,13 +82,12 @@ export default function Dashboard({ navigation }) {
 
     const removeData = async () => {
         try {
-          const savedUser = await AsyncStorage.clear();
+            const savedUser = await AsyncStorage.clear();
+            navigation.replace('Dashboard')
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
-    
-
+    };
 
 
     return (
@@ -113,7 +112,7 @@ export default function Dashboard({ navigation }) {
                     <TouchableOpacity onPress={() => { Favouritelist(), setStatus(0), setFavourite(1) }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '60%', alignSelf: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>CLICK TO VIEW FAVOURITE LIST</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {removeData(), alert('Your Favourite List is Empty Now')}} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '80%', alignSelf: 'center' }}>
+                    <TouchableOpacity onPress={() => { removeData(), alert('Your Favourite List is Empty Now') }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '80%', alignSelf: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>CLICK TO EMPTY YOUR FAVOURITE LIST</Text>
                     </TouchableOpacity>
 
