@@ -1,0 +1,20 @@
+INSTRUCTION HOW TO RUN THE PROJECT
+
+1)) CLONE THE REPOSITORY TO A LOCATION ON YOUR SYSTEM
+2)) INSTALL NODE.JS
+3)) INSTALL YARN GLOBALLY ON YOUR SYSTEM  (npm install --global yarn) using terminal
+4)) OPEN FILE LOCATION USING TERMINAL(CMD)
+5)) RUN COMMAND: yarn      ------it will install packages
+6)) ON SUCCESSFULLY SETUP: RUN COMMAND: npx expo start (for same network on pc and phone) otherwise run: npx expo start tunnel if previous not work 
+    Maybe it will ask you to install tunnel for that so follow the steps to proceed
+
+NOW IT WILL GENERATE QR CODE ON YOUR TERMINAL WITH URL
+
+7)) Install Expo Go APP on your ANdroid Device from PLay STore
+
+8)) OPEN the APP and SCAN QR CODE . IT WILL RUN THE APP ON YOUR ANDROID...
+
+
+Now YOU can use the functionality of Recipe Finder App...
+
+if any query or issue, YOU can contact me...

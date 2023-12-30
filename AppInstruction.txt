@@ -1,0 +1,24 @@
+Some instruction about development of APP ( Recipe Finder App )
+
+
+--   Login Screen and and Sign Up Screen is Static. No Authentication code is there because it is not necessary.
+--   First page after login is User dashboard where Search bar and Search button is used to search Recipe.
+     (Click to view favourite list) button is used for viewing your favourite recipe list
+     (Click to empty your favourite list) button is used to clear your favourite list data
+--   Next Screen is Recipe Detail Page which will be open when you click on any Recipe from Dashboard. This Screen will show chosen Recipe Detail.
+     You can also add Recipe to your Favourite List from here    
+
+
+     NOTE:
+     - React Native App (Expo) is Used for development.
+     - Axios is used for API Integration Process.
+     - spoonacular is used as API and postman for API testing
+     - ScreenShots of App are attached.
+
+
+
+
+---> This Project is Fully Developed by me alone.
+If any query, doubt and error. You can contact me.
+
+---> I fully try to develop this app based on your need. If you need any changes. I am available for that.
