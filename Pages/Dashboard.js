@@ -11,10 +11,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Dashboard({ navigation }) {
     const [recipedata, setRecipedata] = useState();
+    const [favouritedata, setFavouritedata] = useState();
     const [search, setSearch] = useState();
-    const [status, setStatus] = useState();
+    const [status, setStatus] = useState(0);
     const [totalresult, setTotalresult] = useState();
+    const [favourite, setFavourite] = useState(0);
+    const [favouriteid, setFavouriteid] = useState();
 
+
+    const getData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('favorites');
+            setFavouriteid(JSON.parse(jsonValue))
+        } catch (e) {
+        }
+    };
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+
+    //console.log('favouriteid:', favouriteid);
 
     const Recipelist = async () => {
         try {
@@ -39,6 +57,39 @@ export default function Dashboard({ navigation }) {
         }
     };
 
+    const Favouritelist = async () => {
+        try {
+            const { data } = await axios({
+                method: 'GET',
+                url: 'https://api.spoonacular.com/recipes/informationBulk',
+                params: {
+                    apiKey: 'e04b1144c5d24609aaba868e7e09f113',
+                    ids: String(favouriteid),
+                    number: 100
+                },
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            //console.log("data", data);
+            setFavouritedata(data);
+            //setTotalresult(data.totalResults)
+        } catch (err) {
+            console.log("196", err);
+        }
+    };
+
+    const removeData = async () => {
+        try {
+          const savedUser = await AsyncStorage.clear();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
+
+
 
     return (
         <>
@@ -56,19 +107,23 @@ export default function Dashboard({ navigation }) {
                         //autoComplete='off'
                         value={search}
                         onChangeText={text => setSearch(text)} />
-                    <TouchableOpacity onPress={() => { setStatus(1), Recipelist() }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 15, backgroundColor: 'blue', width: '20%', alignSelf: 'center' }}>
+                    <TouchableOpacity onPress={() => { setStatus(1), Recipelist(), setFavourite(0) }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 15, backgroundColor: 'blue', width: '20%', alignSelf: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>SEARCH</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => alert('Added as Favourite')} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '60%', alignSelf: 'center' }}>
+                    <TouchableOpacity onPress={() => { Favouritelist(), setStatus(0), setFavourite(1) }} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '60%', alignSelf: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>CLICK TO VIEW FAVOURITE LIST</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {removeData(), alert('Your Favourite List is Empty Now')}} style={{ alignItems: 'center', borderRadius: 4, height: 35, marginTop: 25, backgroundColor: 'blue', width: '80%', alignSelf: 'center' }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold', justifyContent: 'center', padding: 7 }}>CLICK TO EMPTY YOUR FAVOURITE LIST</Text>
+                    </TouchableOpacity>
+
 
                     {totalresult == 0 ? <Text style={{ alignSelf: 'center', marginTop: width * 0.5, fontWeight: "bold", fontSize: 22 }}>No Result Found</Text> : ''}
                     {totalresult != 0 && status == 1 ? <>
                         <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Lists</Text>
                         {recipedata?.map(function (food) {
                             return (
-                                <TouchableOpacity onPress={()=>navigation.navigate('RecipeDetails', food.id)} key={food.id}>
+                                <TouchableOpacity onPress={() => navigation.navigate('RecipeDetails', food.id)} key={food.id}>
                                     <ImageBackground
                                         source={{ uri: food.image }}
                                         style={{ width: width * 0.9, height: height * 0.3, marginTop: 20, marginLeft: 15, marginBottom: 20 }}
@@ -81,6 +136,25 @@ export default function Dashboard({ navigation }) {
                                 </TouchableOpacity>
                             )
                         })}</> : ''}
+                    {favourite == 1 ? <>
+
+                        <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Favourite Recipe Lists</Text>
+                        {favouritedata?.map(function (food) {
+                            return (
+                                <TouchableOpacity onPress={() => navigation.navigate('RecipeDetails', food.id)} key={food.id}>
+                                    <ImageBackground
+                                        source={{ uri: food.image }}
+                                        style={{ width: width * 0.9, height: height * 0.3, marginTop: 20, marginLeft: 15, marginBottom: 20 }}
+                                    >
+                                        <View style={{ position: 'absolute', bottom: 0, backgroundColor: 'blue', flex: 1, width: width * 0.9, alignItems: 'center' }}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20, marginBottom: 10, marginTop: 5 }}>{food.title}</Text>
+
+                                        </View>
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                            )
+                        })}</> : ''}
+
                 </ScrollView >
             </LinearGradient >
         </>

@@ -12,16 +12,33 @@ import axios from "axios";
 export default function RecipeDetails({ navigation, route }) {
     const [recipeid, setrecipeid] = useState(route.params);
     const [recipedata, setRecipedata] = useState();
+    const [favouriteid, setFavouriteid] = useState();
 
     useEffect(() => {
         Recipelist();
     }, [recipeid])
 
+    const addToFavorites = async (foodId) => {
+        console.log('add to favourite call');
+        try {
+            const existingFavorites = await AsyncStorage.getItem('favorites');
+            const favorites = existingFavorites ? JSON.parse(existingFavorites) : [];
+
+            if (!favorites.includes(foodId)) {
+                favorites.push(foodId);
+                await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+        } catch (error) {
+            console.error('Error adding to favorites:', error);
+        }
+    };
+
+
     const Recipelist = async () => {
         try {
             const { data } = await axios({
                 method: 'GET',
-                url: 'https://api.spoonacular.com/recipes/'+recipeid+'/information',
+                url: 'https://api.spoonacular.com/recipes/' + recipeid + '/information',
                 params: {
                     apiKey: 'e04b1144c5d24609aaba868e7e09f113',
                     includeNutrition: false,
@@ -31,7 +48,7 @@ export default function RecipeDetails({ navigation, route }) {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log("data", data);
+            //console.log("data", data);
             setRecipedata(data);
         } catch (err) {
             console.log("195", err);
@@ -39,7 +56,7 @@ export default function RecipeDetails({ navigation, route }) {
     };
 
 
-
+    
     return (
         <>
             <LinearGradient
@@ -57,8 +74,8 @@ export default function RecipeDetails({ navigation, route }) {
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'column' }}>
-                                <Text style={{ color: 'white', marginLeft: width * 0.05, marginTop: width * 0.09, fontWeight: '800' }}>{recipedata?.vegetarian?'Vegetarian':'Non-Vegetarian'}</Text>
-                                <View style={{ flexDirection: 'row', marginBottom:20 }}>
+                                <Text style={{ color: 'white', marginLeft: width * 0.05, marginTop: width * 0.09, fontWeight: '800' }}>{recipedata?.vegetarian ? 'Vegetarian' : 'Non-Vegetarian'}</Text>
+                                <View style={{ flexDirection: 'row', marginBottom: 20 }}>
                                     <View style={{ flexDirection: 'column', width: width * 0.5 }}>
                                         <Text style={{ color: 'white', marginLeft: width * 0.05, fontWeight: '800' }}>Health Score: {recipedata?.healthScore}</Text>
                                     </View>
@@ -66,21 +83,23 @@ export default function RecipeDetails({ navigation, route }) {
                                         <Text style={{ color: 'white', marginRight: width * 0.15, fontWeight: '800', textAlign: 'right' }}>{recipedata?.license}</Text>
                                     </View>
                                 </View>
-                                </View>
                             </View>
                         </View>
-                        <TouchableOpacity style={{width:'30%', height:35, backgroundColor:'blue', alignSelf:"center", alignItems:'center',
-                        marginTop:15, borderRadius:6}} onPress={()=>alert('Added to Favourite List')}>
-                            <Text style={{marginTop:5, fontWeight:'bold', color:'white', fontSize:14}}>Add to Favourite</Text>
-                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={{
+                        width: '30%', height: 35, backgroundColor: 'blue', alignSelf: "center", alignItems: 'center',
+                        marginTop: 15, borderRadius: 6
+                    }} onPress={() => { addToFavorites(recipeid), alert('Added to Favourite List') }}>
+                        <Text style={{ marginTop: 5, fontWeight: 'bold', color: 'white', fontSize: 14 }}>Add to Favourite</Text>
+                    </TouchableOpacity>
 
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 15, marginTop: 20,  }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 15, marginTop: 20, }}>
                         Recipe Image
                     </Text>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ImageBackground
-                            source={{uri:recipedata?.image}}
-                            style={{width: width*0.9, height: height*0.3, marginTop: 20, marginBottom: 20 }}
+                            source={{ uri: recipedata?.image }}
+                            style={{ width: width * 0.9, height: height * 0.3, marginTop: 20, marginBottom: 20 }}
                         >
                         </ImageBackground>
 
@@ -89,7 +108,7 @@ export default function RecipeDetails({ navigation, route }) {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Recipe Name:
                         </Text>
-                        <Text style={{ color: 'white', marginTop: 21,width:'65%' }}> {recipedata?.title}</Text>
+                        <Text style={{ color: 'white', marginTop: 21, width: '65%' }}> {recipedata?.title}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Ready in Minutes:
@@ -97,19 +116,19 @@ export default function RecipeDetails({ navigation, route }) {
                         <Text style={{ color: 'white', marginTop: 21, }}> {recipedata?.readyInMinutes} minutes</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Servings: 
-                         </Text>
-                        <Text style={{ color: 'white', marginTop: 21, width:'70%', textAlign:'justify' }}>{recipedata?.servings}</Text>
+                        <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Servings:
+                        </Text>
+                        <Text style={{ color: 'white', marginTop: 21, width: '70%', textAlign: 'justify' }}>{recipedata?.servings}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Vegetarian:
                         </Text>
-                        <Text style={{ color: 'white', marginTop: 21, }}> {recipedata?.vegetarian?'YES':'NO'}</Text>
+                        <Text style={{ color: 'white', marginTop: 21, }}> {recipedata?.vegetarian ? 'YES' : 'NO'}</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', marginBottom:30 }}>
+                    <View style={{ flexDirection: 'row', marginBottom: 30 }}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 15, marginTop: 20, color: 'white' }}>Summary:
                         </Text>
-                        <Text style={{ color: 'white', marginTop: 21, width:'70%' }}> {recipedata?.summary}</Text>
+                        <Text style={{ color: 'white', marginTop: 21, width: '70%' }}> {recipedata?.summary}</Text>
                     </View>
 
                 </ScrollView>
